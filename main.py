@@ -5,7 +5,8 @@ load_dotenv("key.env")
 client=genai.Client()
 files_uploaded=[]
 sub_uploaded=[]
-count=1
+
+
 def file_uploader(path,sub):
     # while(count==1):
         try:
@@ -27,15 +28,21 @@ def file_uploader(path,sub):
         except FileNotFoundError:
             print(f"The directory {path} was not found.")
 
-file_uploader("D:/Pulkit/100 days python/Day 24",False)
+with open("./day.txt","r+") as file:
+    day_counter=int(file.read())
+    print(type(day_counter))
+    file_uploader(f"D:/Pulkit/100 days python/Day {day_counter}",False)
+    day_counter=day_counter+1
+    file.seek(0)
+    file.write(str(day_counter))
 
 
-response=client.models.generate_content(
-    model="gemini-3.1-flash-lite",
-    contents=f"{files_uploaded} summarize these file content in 50 words",
-    # max_output_tokens=150
-)
-print(response.text)
+# response=client.models.generate_content(
+#     model="gemini-3.1-flash-lite",
+#     contents=f"{files_uploaded} summarize these file content in 50 words"
+#     # max_output_tokens=150
+# )
+# print(response.text)
 with open("./draft.txt","w") as f:
     # f.write(response.text)
     pass
