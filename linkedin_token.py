@@ -21,6 +21,15 @@ data=response.json()
 token=data["access_token"]
 config["LINKEDIN"]["access_token"]=token
 with open("codes.ini","w") as f:
-    config.write("codes.ini")
+    config.write(f)
 
-# print(data)
+print(data)
+
+
+# response = requests.get(
+#     "https://api.linkedin.com/v2/userinfo",
+#     headers={"Authorization": f"Bearer {config["LINKEDIN"]["access_token"]}"}
+# )
+# data=response.json()
+# # print(response.json())
+# print(data["scope"])
