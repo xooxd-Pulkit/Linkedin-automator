@@ -3,8 +3,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv("key.env")
-client_id=os.getenv("LINKEDIN_CLIENT_ID")
-client_secret=os.getenv("LINKEDIN_CLIENT_SECRET")
+
 client=genai.Client()
 files_uploaded=[]
 sub_uploaded=[]
