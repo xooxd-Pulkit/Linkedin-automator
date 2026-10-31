@@ -3,17 +3,24 @@ from configparser import ConfigParser
 from dotenv import load_dotenv
 import os
 load_dotenv("key.env")
-print(os.getenv("LINKEDIN_CLIENT_ID"))
-# os.getenv("LINKEDIN_CLIENT_SECRET")
-# config=ConfigParser()
-# config.read("codes.ini")
+client_id=os.getenv("LINKEDIN_CLIENT_ID")
+client_sec=os.getenv("LINKEDIN_CLIENT_SECRET")
+config=ConfigParser()
+config.read("codes.ini")
 
-# url = "https://www.linkedin.com/oauth/v2/accessToken"
-# data = {
-#     "grant_type": "authorization_code",
-#     "code": config["LINKEDIN"]["access_code"],
-#     "client_id": CLIENT_ID,
-#     "client_secret": CLIENT_SECRET,
-#     "redirect_uri": REDIRECT_URI
-# }
-# response=requests.post(url,data=data)
+url = "https://www.linkedin.com/oauth/v2/accessToken"
+data = {
+    "grant_type": "authorization_code",
+    "code": config["LINKEDIN"]["access_code"],
+    "client_id": client_id,
+    "client_secret": client_sec,
+    "redirect_uri": "http://localhost:8000/callback"
+}
+response=requests.post(url,data=data)
+data=response.json()
+token=data["access_token"]
+config["LINKEDIN"]["access_token"]=token
+with open("codes.ini","w") as f:
+    config.write("codes.ini")
+
+# print(data)
