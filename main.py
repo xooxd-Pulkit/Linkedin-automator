@@ -1,12 +1,16 @@
 from google import genai
 from dotenv import load_dotenv
 import os
+
 load_dotenv("key.env")
+client_id=os.getenv("LINKEDIN_CLIENT_ID")
+client_secret=os.getenv("LINKEDIN_CLIENT_SECRET")
 client=genai.Client()
 files_uploaded=[]
 sub_uploaded=[]
 
-
+with open("./promp.txt","r") as f:
+    prompt=f.read()
 def file_uploader(path,sub):
     # while(count==1):
     global sub_uploaded
@@ -40,46 +44,7 @@ with open("./day.txt","r+") as file:
 
 response=client.models.generate_content(
     model="gemini-3.1-flash-lite",
-    contents=f"""{files_uploaded}Analyze all the files provided to you carefully. They contain my work, code, notes, exercises, and projects from a particular day of my 100 Days of Python journey.
-
-Understand the actual work I have completed and identify:
-
-- What Python concepts and technical skills I learned.
-- What I practically implemented and experimented with.
-- What programs, exercises, or projects I developed and their functionality.
-- What new programming techniques, modules, libraries, or methods I used.
-- What challenges I encountered and what problem-solving skills I demonstrated.
-- What meaningful progress I made as a Python developer.
-
-Connect related files and understand the complete context instead of analyzing each file independently.
-
-Now, act as an experienced software engineer and professional LinkedIn content strategist. Based on your analysis, write ONE polished, engaging, ready-to-publish LinkedIn post in first person, as if I wrote it myself.
-
-**Writing requirements:**
-- Start with a strong, natural hook.
-- Clearly communicate what I learned and built.
-- Highlight practical implementations rather than simply listing concepts.
-- Explain interesting technical aspects without making the post unnecessarily lengthy.
-- Maintain a professional, authentic, conversational tone.
-- Make it engaging for developers, recruiters, and fellow learners.
-- Use natural English appropriate for a Computer Science student.
-- Include relevant emojis sparingly.
-- End with a meaningful reflection or engaging question.
-- Add 4–6 relevant hashtags.
-
-**Strict rules:**
-- Never invent achievements, projects, features, or learning outcomes.
-- Never exaggerate simple exercises into major accomplishments.
-- Distinguish between concepts studied and concepts actually implemented.
-- Do not repeat information or use generic motivational statements.
-- Never include API keys, passwords, credentials, or sensitive information.
-- If information is unclear, do not make assumptions.
-
-The post should demonstrate genuine technical progress, not pretend expertise.
-
-**Output only the final LinkedIn post.** Do not provide file analysis, explanations, suggestions, multiple versions, or any introductory commentary.
-
-Before responding, verify technical accuracy, authenticity, readability, and factual consistency with the supplied files. Make the final post ready to copy and publish without editing. Also mention day number in the post day is {day_counter-1}."""
+    contents=f"""{files_uploaded}{prompt}{day_counter-1}."""
     # max_output_tokens=150
 )
 # print(response.text)
