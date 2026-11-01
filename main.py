@@ -17,6 +17,14 @@ sub_uploaded=[]
 
 with open("./promp.txt","r") as f:
     prompt=f.read()
+
+def material_gen(day_counter):
+    response=client.models.generate_content(
+        model="gemini-3.1-flash-lite",
+        contents=f"""{files_uploaded}{prompt}{day_counter}."""
+        # max_output_tokens=150
+    )
+    return response
 def post(material):
     url = "https://api.linkedin.com/rest/posts"
     post_data= {
@@ -63,40 +71,21 @@ def file_uploader(path,sub):
                     file_uploader(entry.path,True)
                     files_uploaded.append(sub_uploaded)
                     sub_uploaded=[]
+            # return True
     except FileNotFoundError:
         print(f"The directory {path} was not found.")
+        return False
 with open("./day.txt","r+") as file:
     day_counter=int(file.read())
-    print(type(day_counter))
-    file_uploader(f"D:/Pulkit/100 days python/Day {day_counter}",False)
-    day_counter=day_counter+1
-    file.seek(0)
-    file.write(str(day_counter))
-
-# print(files_uploaded)
-
-response=client.models.generate_content(
-    model="gemini-3.1-flash-lite",
-    contents=f"""{files_uploaded}{prompt}{day_counter-1}."""
-    # max_output_tokens=150
-)
-# # print(response.text)
-with open("./draft.txt", "w", encoding="utf-8") as f:
-    f.write(response.text)
+    # print(type(day_counter))
+    found=file_uploader(f"D:/Pulkit/100 days python/Day {day_counter}",False)
+    if(found!=False):
+        response=material_gen(day_counter)
+        day_counter=day_counter+1
+        file.seek(0)
+        file.write(str(day_counter))
+        with open("./draft.txt", "w", encoding="utf-8") as f:
+            f.write(response.text)
+        post(response.text)
 
 
-post(response.text)
-
-
-# import requests
-
-# Use your existing headers with the access token
-# import requests
-
-# headers = {
-#     "Authorization": f"Bearer {config['LINKEDIN']['access_token']}"
-# }
-
-# # Standard OpenID Connect endpoint for user details
-# response = requests.get("https://api.linkedin.com/v2/userinfo", headers=headers)
-# print(response.json())
