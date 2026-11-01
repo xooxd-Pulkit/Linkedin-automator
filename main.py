@@ -4,7 +4,8 @@ from configparser import ConfigParser
 import os
 import requests
 import sys
-
+import expiry
+from complete_auth import start
 sys.stdout.reconfigure(encoding="utf-8")
 sys.stderr.reconfigure(encoding="utf-8")
 load_dotenv("key.env")
@@ -75,17 +76,26 @@ def file_uploader(path,sub):
     except FileNotFoundError:
         print(f"The directory {path} was not found.")
         return False
-with open("./day.txt","r+") as file:
-    day_counter=int(file.read())
-    # print(type(day_counter))
-    found=file_uploader(f"D:/Pulkit/100 days python/Day {day_counter}",False)
-    if(found!=False):
-        response=material_gen(day_counter)
-        day_counter=day_counter+1
-        file.seek(0)
-        file.write(str(day_counter))
-        with open("./draft.txt", "w", encoding="utf-8") as f:
-            f.write(response.text)
-        post(response.text)
+
+is_expired=expiry.is_expired()
+if(is_expired):
+    print("The Token is Expired, Please Generate New Token")
+    start()
+    
+
+else:
+
+    with open("./day.txt","r+") as file:
+        day_counter=int(file.read())
+        # print(type(day_counter))
+        found=file_uploader(f"D:/Pulkit/100 days python/Day {day_counter}",False)
+        if(found!=False):
+            response=material_gen(day_counter)
+            day_counter=day_counter+1
+            file.seek(0)
+            file.write(str(day_counter))
+            with open("./draft.txt", "w", encoding="utf-8") as f:
+                f.write(response.text)
+            post(response.text)
 
 
