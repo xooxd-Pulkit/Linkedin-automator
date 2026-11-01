@@ -32,6 +32,7 @@ Now, act as an experienced software engineer and professional LinkedIn content s
 - Do not repeat information or use generic motivational statements.
 - Never include API keys, passwords, credentials, or sensitive information.
 - If information is unclear, do not make assumptions.
+- (imp) Mention what i create in that day and what i learn
 
 The post should demonstrate genuine technical progress, not pretend expertise.
 
