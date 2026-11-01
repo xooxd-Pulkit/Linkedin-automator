@@ -22,14 +22,15 @@ data = {
 def linkedin_token():
 
     response=requests.post(url,data=data)
-    data=response.json()
-    token=data["access_token"]
+    data_json=response.json()
+    print(data_json)
+    token=data_json["access_token"]
     config["LINKEDIN"]["access_token"]=token
     config["LINKEDIN"]["expiry_sec"]=str(current_seconds+5000000)
     with open("codes.ini","w") as f:
         config.write(f)
 
-    print(data)
+    
 
 
 # response = requests.get(
